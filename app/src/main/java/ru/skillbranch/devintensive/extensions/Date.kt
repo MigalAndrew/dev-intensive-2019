@@ -37,11 +37,11 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         delta <= SECOND -> return "только что"
         delta > SECOND && delta <= SECOND * 45 -> "несколько секунд"
         delta > SECOND * 45 && delta <= SECOND * 75 -> "минуту"
-        delta > SECOND * 75 && delta <= MINUTE * 45 -> TimeUnits.MINUTE.pluralTime((delta / MINUTE).toInt())
+        delta > SECOND * 75 && delta <= MINUTE * 45 -> TimeUnits.MINUTE.plural((delta / MINUTE).toInt())
         delta > MINUTE * 45 && delta <= MINUTE * 75 -> "час"
-        delta > MINUTE * 75 && delta <= HOUR * 22 -> TimeUnits.HOUR.pluralTime((delta / HOUR).toInt())
+        delta > MINUTE * 75 && delta <= HOUR * 22 -> TimeUnits.HOUR.plural((delta / HOUR).toInt())
         delta > HOUR * 22 && delta <= HOUR * 26 -> "день"
-        delta > HOUR * 26 && delta <= DAY * 360 -> TimeUnits.DAY.pluralTime((delta / DAY).toInt())
+        delta > HOUR * 26 && delta <= DAY * 360 -> TimeUnits.DAY.plural((delta / DAY).toInt())
         delta > DAY * 360 -> return if (isPast) "более года назад" else "более чем через год"
         else -> return ""
     }
@@ -55,7 +55,7 @@ enum class TimeUnits{
     HOUR,
     DAY;
 
-    fun pluralTime(time:Int):String{
+    fun plural(time:Int):String{
         return when (this){
             SECOND -> "$time ${when {
                 time == 1 || time % 10 == 1 -> "секунду"
