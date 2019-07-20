@@ -46,7 +46,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         else -> return ""
     }
 
-    return if (isPast) "$delta $result назад" else "$delta через $result"
+    return if (isPast) "$result назад" else "через $result"
 }
 
 enum class TimeUnits{
