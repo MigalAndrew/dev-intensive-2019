@@ -31,7 +31,7 @@ object Utils {
         val elA = firstName?.toUpperCase()?.trim()?.firstOrNull()
         val elB = lastName?.toUpperCase()?.trim()?.firstOrNull()
 
-        return if (elA == null && elB == null) "null"
+        return if (elA == null && elB == null) null
         else "${elA?:""}${elB?:""}"
     }
 
