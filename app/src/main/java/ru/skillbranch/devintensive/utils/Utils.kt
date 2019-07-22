@@ -16,14 +16,14 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-        var Newpayload: String = ""
-        for (let in payload.trim()) Newpayload += when (let){
+        var newpayload: String = ""
+        for (let in payload.trim()) newpayload += when (let){
             ' ' -> divider
             let.toUpperCase() -> letters[let.toLowerCase()]?.toUpperCase()
             else -> letters[let]
         }
 
-        return Newpayload
+        return newpayload
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
