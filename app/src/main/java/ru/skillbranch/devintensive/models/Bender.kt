@@ -22,8 +22,22 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 //            "Это не правильный ответ!\n${question.question}" to status.color
 //        }
 
-        return when(question) {
-            Question.IDLE -> "Отлично - ты справился\nНа этом все, вопросов больше нет" to status.color
+        return when {
+            question.answer.contains(answer) -> {
+                question = question.nextQuestion()
+                "Отлично - ты справился\n${question.question}" to status.color
+            }
+            question == Question.IDLE -> "Отлично - ты справился\nНа этом все, вопросов больше нет" to status.color
+            status == Status.CRITICAL && !question.answer.contains(answer) -> {
+                status = status.nextStatus()
+                question = Question.NAME
+                "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
+            }
+            !question.answer.contains(answer) -> {
+                status = status.nextStatus()
+                "Это неправильный ответ\n${question.question}" to status.color
+            }
+
             else -> "" to status.color
         }
 
