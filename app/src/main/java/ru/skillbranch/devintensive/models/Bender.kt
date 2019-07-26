@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import org.intellij.lang.annotations.RegExp
+
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
 
     fun askQuestion(): String = when (question) {
@@ -14,23 +16,23 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
 
-        val isValidAnswer = question.ValidateAnswer(answer)
+        val isValidAnswer = question.ValidateAnswer(answer.trim())
 
         return when {
             isValidAnswer != "" -> {
-                isValidAnswer to status.color
+                "$isValidAnswer\n${question.question}" to status.color
             }
-            question.answer.contains(answer) -> {
+            question.answer.contains(answer.toLowerCase()) -> {
                 question = question.nextQuestion()
                 "Отлично - ты справился\n${question.question}" to status.color
             }
             question == Question.IDLE -> "Отлично - ты справился\nНа этом все, вопросов больше нет" to status.color
-            status == Status.CRITICAL && !question.answer.contains(answer) -> {
+            status == Status.CRITICAL && !question.answer.contains(answer.toLowerCase()) -> {
                 status = Status.NORMAL
                 question = Question.NAME
                 "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
             }
-            !question.answer.contains(answer) -> {
+            !question.answer.contains(answer.toLowerCase()) -> {
                 status = status.nextStatus()
                 "Это неправильный ответ\n${question.question}" to status.color
             }
@@ -83,12 +85,15 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         abstract fun nextQuestion():Question
 
         fun ValidateAnswer(answer: String):String{
-
-            if (this == NAME ) {
-                return ""
+            return when {
+                (this == NAME && answer.substring(0,1) != answer.substring(0,1).toUpperCase()) -> "Имя должно начинаться с заглавной буквы"
+                (this == PROFESSION && answer.substring(0,1) != answer.substring(0,1).toLowerCase()) -> "Профессия должна начинаться со строчной буквы"
+                (this == MATERIAL && Regex("""\d+""").find(answer)?.value != null) -> "Материал не должен содержать цифр"
+                (this == BDAY && Regex("""\d+""").matchEntire(answer)?.value == null) -> "Год моего рождения должен содержать только цифры"
+                (this == SERIAL && Regex("""\d{7}""").matchEntire(answer)?.value == null) -> "Серийный номер содержит только цифры, и их 7"
+                this == IDLE -> ""
+                else -> ""
             }
-            return ""
-
         }
     }
 }
