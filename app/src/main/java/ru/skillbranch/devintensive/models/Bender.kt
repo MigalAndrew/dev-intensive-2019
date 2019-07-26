@@ -14,22 +14,19 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
 
-//        return if (question.answer.contains(answer)){
-//            question = question.nextQuestion()
-//            "Отлично - ты справился\n${question.question}" to status.color
-//        }else{
-//            status = status.nextStatus()
-//            "Это не правильный ответ!\n${question.question}" to status.color
-//        }
+        val isValidAnswer = question.ValidateAnswer(answer)
 
         return when {
+            isValidAnswer != "" -> {
+                isValidAnswer to status.color
+            }
             question.answer.contains(answer) -> {
                 question = question.nextQuestion()
                 "Отлично - ты справился\n${question.question}" to status.color
             }
             question == Question.IDLE -> "Отлично - ты справился\nНа этом все, вопросов больше нет" to status.color
             status == Status.CRITICAL && !question.answer.contains(answer) -> {
-                status = status.nextStatus()
+                status = Status.NORMAL
                 question = Question.NAME
                 "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
             }
@@ -42,6 +39,11 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         }
 
     }
+//
+//    enum class ValidateAnswer(val question: Question,  val answer: String){
+//
+//
+//    }
 
     enum class Status(val color: Triple<Int, Int, Int>) {
         NORMAL(Triple(255,255,255)),
@@ -55,9 +57,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             }else{
                 values()[0]
             }
-
         }
-
     }
 
     enum class Question(val question: String, val answer: List<String>) {
@@ -81,5 +81,14 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         };
 
         abstract fun nextQuestion():Question
+
+        fun ValidateAnswer(answer: String):String{
+
+            if (this == NAME ) {
+                return ""
+            }
+            return ""
+
+        }
     }
 }
