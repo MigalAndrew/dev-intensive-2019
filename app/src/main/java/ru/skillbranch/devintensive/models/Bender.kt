@@ -82,8 +82,8 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         fun ValidateAnswer(answer: String):String{
             return when {
                 (this == IDLE) -> ""
-                (this == NAME && answer.trim().firstOrNull()?.isUpperCase() ?: false) -> "Имя должно начинаться с заглавной буквы"
-                (this == PROFESSION && answer.trim().firstOrNull()?.isLowerCase() ?: false) -> "Профессия должна начинаться со строчной буквы"
+                (this == NAME && answer.trim().firstOrNull()?.isLowerCase() ?: false) -> "Имя должно начинаться с заглавной буквы"
+                (this == PROFESSION && answer.trim().firstOrNull()?.isUpperCase() ?: false) -> "Профессия должна начинаться со строчной буквы"
                 (this == MATERIAL && Regex("""\d+""").find(answer)?.value != null) -> "Материал не должен содержать цифр"
                 (this == BDAY && Regex("""\d+""").matchEntire(answer)?.value == null) -> "Год моего рождения должен содержать только цифры"
                 (this == SERIAL && Regex("""\d{7}""").matchEntire(answer)?.value == null) -> "Серийный номер содержит только цифры, и их 7"
