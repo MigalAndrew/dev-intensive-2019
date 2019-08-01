@@ -16,7 +16,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
 
-        val isValidAnswer = question.ValidateAnswer(answer.trim())
+        val isValidAnswer = question.validateAnswer(answer.trim())
 
         return when {
             isValidAnswer != "" -> {
@@ -60,35 +60,32 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     enum class Question(val question: String, val answer: List<String>) {
         NAME("Как меня зовут?", listOf("бендер", "bender")) {
             override fun nextQuestion(): Question = PROFESSION
+            override fun validateAnswer(answer: String): String {return if (answer.trim().firstOrNull()?.isLowerCase() ?: false) "Имя должно начинаться с заглавной буквы" else ""}
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")){
             override fun nextQuestion(): Question = MATERIAL
+            override fun validateAnswer(answer: String): String {return if (answer.trim().firstOrNull()?.isUpperCase() ?: false) "Имя должно начинаться с заглавной буквы" else ""}
         },
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "metal", "iron", "wood")){
             override fun nextQuestion(): Question = BDAY
+            override fun validateAnswer(answer: String): String {return if (Regex("""\d+""").find(answer)?.value != null) "Материал не должен содержать цифр" else ""}
         },
         BDAY("Когда меня создали?", listOf("2993")){
             override fun nextQuestion(): Question = SERIAL
+            override fun validateAnswer(answer: String): String {return if (Regex("""\d+""").matchEntire(answer)?.value == null) "Год моего рождения должен содержать только цифры" else ""}
         },
         SERIAL("Мой серийный номер?", listOf("2716057")){
             override fun nextQuestion(): Question = IDLE
+            override fun validateAnswer(answer: String): String {return if (Regex("""\d{7}""").matchEntire(answer)?.value == null) "Серийный номер содержит только цифры, и их 7" else ""}
         },
         IDLE("На этом все, вопросов больше нет", listOf()){
             override fun nextQuestion(): Question = IDLE
+            override fun validateAnswer(answer: String): String = ""
+
         };
 
         abstract fun nextQuestion():Question
+        abstract fun validateAnswer(answer: String):String
 
-        fun ValidateAnswer(answer: String):String{
-            return when {
-                (this == IDLE) -> ""
-                (this == NAME && answer.trim().firstOrNull()?.isLowerCase() ?: false) -> "Имя должно начинаться с заглавной буквы"
-                (this == PROFESSION && answer.trim().firstOrNull()?.isUpperCase() ?: false) -> "Профессия должна начинаться со строчной буквы"
-                (this == MATERIAL && Regex("""\d+""").find(answer)?.value != null) -> "Материал не должен содержать цифр"
-                (this == BDAY && Regex("""\d+""").matchEntire(answer)?.value == null) -> "Год моего рождения должен содержать только цифры"
-                (this == SERIAL && Regex("""\d{7}""").matchEntire(answer)?.value == null) -> "Серийный номер содержит только цифры, и их 7"
-                else -> ""
-            }
-        }
     }
 }
