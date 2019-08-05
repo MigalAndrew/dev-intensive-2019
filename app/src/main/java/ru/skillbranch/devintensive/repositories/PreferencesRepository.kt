@@ -51,8 +51,9 @@ object PreferencesRepository {
             is Long -> putLong(key, value)
             is Float -> putFloat(key, value)
             else -> error("only primitive types can be stored")
-
         }
+
+        apply()
     }
 
 }

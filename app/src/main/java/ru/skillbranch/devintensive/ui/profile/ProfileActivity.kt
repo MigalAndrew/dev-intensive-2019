@@ -65,7 +65,7 @@ class ProfileActivity : AppCompatActivity() {
             "rank" to tv_rank,
             "firstName" to et_first_name,
             "lastName" to et_last_name,
-            "about " to et_about,
+            "about" to et_about,
             "repository" to et_repository,
             "rating" to tv_rating,
             "respect" to tv_respect

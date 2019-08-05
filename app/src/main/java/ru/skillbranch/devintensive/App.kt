@@ -10,7 +10,6 @@ class App : Application() {
         fun applicationContext(): Context {
             return instance!!.applicationContext
         }
-
     }
 
     init {
@@ -19,6 +18,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //TODO sdfwe
+        //TODO call once when application created
     }
 }

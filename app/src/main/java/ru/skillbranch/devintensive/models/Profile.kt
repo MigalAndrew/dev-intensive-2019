@@ -21,7 +21,5 @@ data class Profile(
                 "repository" to repository,
                 "rating" to rating,
                 "respect" to respect
-
-
     )
 }
