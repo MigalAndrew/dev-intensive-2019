@@ -83,7 +83,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showCurrentMode(isEdit: Boolean) {
-        val info = viewFields.filter { setOf("firstName", "lastName", "about ", "repository").contains(it.key) }
+        val info = viewFields.filter { setOf("firstName", "lastName", "about", "repository").contains(it.key) }
         for ((_, v) in info) {
             v as EditText
             v.isFocusable = isEdit
